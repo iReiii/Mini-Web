@@ -23,6 +23,13 @@ function data_pasien(){
     return $pasien;
 }
 
+function id_pasien($id) {
+    global $conn;
+    $sql = $conn->prepare("SELECT * FROM pasien WHERE id_pasien = :id");
+    $sql->execute(['id' => $id]);
+    return $sql->fetch(PDO::FETCH_ASSOC); 
+}
+
 function tambah_pasien($data){
     global $conn;
     $nama = htmlspecialchars($data['nama']);
@@ -80,13 +87,6 @@ function upload_foto(){
     $target_file = '../uploads/' . $namaFoto;
     move_uploaded_file($tmpName, $target_file);
     return $namaFoto;
-}
-
-function id_pasien($id) {
-    global $conn;
-    $sql = $conn->prepare("SELECT * FROM pasien WHERE id_pasien = :id");
-    $sql->execute(['id' => $id]);
-    return $sql->fetch(PDO::FETCH_ASSOC); 
 }
 
 function edit_pasien($data){

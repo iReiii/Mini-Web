@@ -1,8 +1,6 @@
 <?php
 require "../include/db.php";
-session_start();
 $id = $_GET['id'] ?? null;
-$_SESSION['id'] = $id;
 $pasien = id_pasien($id);
 
 if(isset($_POST["submit"])) {
