@@ -29,7 +29,7 @@ if(isset($_POST["submit"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../src/output.css" rel="stylesheet">
     <title>Edit Pasien</title>
 </head>
 <body class="bg-gray-100 flex justify-center items-center min-h-screen py-10">
@@ -42,17 +42,17 @@ if(isset($_POST["submit"])) {
 
             <div>
                 <label class="block text-gray-700 font-semibold">Nama:</label>
-                <input type="text" name="nama" value="<?= $pasien['nama']; ?>" class="border w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" required>
+                <input type="text" name="nama" value="<?= $pasien['nama']; ?>" class="shadow-lg w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" required>
             </div>
             
             <div>
                 <label class="block text-gray-700 font-semibold">Tanggal Lahir:</label>
-                <input type="date" name="tanggal_lahir" value="<?= $pasien['tanggal_lahir']; ?>" class="border w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" required>
+                <input type="date" name="tanggal_lahir" value="<?= $pasien['tanggal_lahir']; ?>" class="shadow-lg w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" required>
             </div>
             
             <div>
                 <label class="block text-gray-700 font-semibold">Jenis Kelamin:</label>
-                <select name="jenis_kelamin" class="border w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300">
+                <select name="jenis_kelamin" class="shadow-lg w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300">
                     <option value="Laki-laki" <?= $pasien['jenis_kelamin'] == 'Laki-laki' ? 'selected' : ''; ?>>Laki-laki</option>
                     <option value="Perempuan" <?= $pasien['jenis_kelamin'] == 'Perempuan' ? 'selected' : ''; ?>>Perempuan</option>
                 </select>
@@ -60,7 +60,7 @@ if(isset($_POST["submit"])) {
             
             <div>
                 <label class="block text-gray-700 font-semibold">Agama:</label>
-                <select name="agama" class="border w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300">
+                <select name="agama" class="shadow-lg w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300">
                     <option value="Islam" <?= $pasien['agama'] == 'Islam' ? 'selected' : ''; ?>>Islam</option>
                     <option value="Kristen" <?= $pasien['agama'] == 'Kristen' ? 'selected' : ''; ?>>Kristen</option>
                     <option value="Katolik" <?= $pasien['agama'] == 'Katolik' ? 'selected' : ''; ?>>Katolik</option>
@@ -72,7 +72,7 @@ if(isset($_POST["submit"])) {
             
             <div>
                 <label class="block text-gray-700 font-semibold">Pendidikan:</label>
-                <select name="pendidikan" class="border w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300">
+                <select name="pendidikan" class="shadow-lg w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300">
                     <option value="TK" <?= $pasien['pendidikan'] == 'TK' ? 'selected' : ''; ?>>TK</option>
                     <option value="SD" <?= $pasien['pendidikan'] == 'SD' ? 'selected' : ''; ?>>SD</option>
                     <option value="SMP" <?= $pasien['pendidikan'] == 'SMP' ? 'selected' : ''; ?>>SMP</option>
@@ -86,12 +86,12 @@ if(isset($_POST["submit"])) {
             
             <div>
                 <label class="block text-gray-700 font-semibold">Diagnosa:</label>
-                <input type="text" name="diagnosa" value="<?= $pasien['diagnosa']; ?>" class="border w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" required>
+                <input type="text" name="diagnosa" value="<?= $pasien['diagnosa']; ?>" class="shadow-lg w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" required>
             </div>
             
             <div>
                 <label class="block text-gray-700 font-semibold">Foto:</label>
-                <input type="file" name="foto" class="border w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" accept="image/*">
+                <input type="file" name="foto" class="shadow-lg w-full p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-300" accept="image/*">
                 <?php if ($pasien['foto']) : ?>
                     <img src="../uploads/<?= $pasien['foto']; ?>" class="w-20 h-20 object-cover mt-2 rounded-md">
                 <?php endif; ?>

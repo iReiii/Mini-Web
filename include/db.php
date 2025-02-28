@@ -32,12 +32,9 @@ function tambah_pasien($data){
     $pendidikan = htmlspecialchars($data['pendidikan']);
     $diagnosa = htmlspecialchars($data['diagnosa']);
 
-    $foto = "";
-    if ($_FILES['foto']['name']) {
-        $target_dir = "../uploads/";
-        $foto = uniqid() . "_" . basename($_FILES["foto"]["name"]);
-        $target_file = $target_dir . $foto;
-        move_uploaded_file($_FILES["foto"]["tmp_name"], $target_file);
+    $foto = upload_foto();
+    if (!$foto){
+        return false;
     }
 
     $sql = "INSERT INTO pasien (nama, tanggal_lahir, jenis_kelamin, agama, pendidikan, diagnosa, foto) VALUES (:nama, :tanggal_lahir, :jenis_kelamin, :agama, :pendidikan, :diagnosa, :foto)";
@@ -54,9 +51,39 @@ function tambah_pasien($data){
     return $stmt->rowCount() > 0;
 }
 
+function upload_foto(){
+    global $conn;
+    $namaFoto = $_FILES['foto']['name'];
+    $ukuranFoto = $_FILES['foto']['size'];
+    $error = $_FILES['foto']['error'];
+    $tmpName = $_FILES['foto']['tmp_name'];
+
+    if ($_FILES['foto']['error'] === 4){
+        echo "
+            <script>
+                alert('Foto Harus Diupload !');
+            </script>
+        ";
+        return false;
+    }
+
+    if ($ukuranFoto > 3000000){
+        echo "
+            <script>
+                alert('Ukuran File Terlalu Besar !');
+            </script>
+        ";
+        return false;
+    }
+
+    $namaFoto = uniqid() . '_' . $namaFoto;
+    $target_file = '../uploads/' . $namaFoto;
+    move_uploaded_file($tmpName, $target_file);
+    return $namaFoto;
+}
+
 function id_pasien($id) {
     global $conn;
-    if (!$id) return null; 
     $sql = $conn->prepare("SELECT * FROM pasien WHERE id_pasien = :id");
     $sql->execute(['id' => $id]);
     return $sql->fetch(PDO::FETCH_ASSOC); 
@@ -71,18 +98,15 @@ function edit_pasien($data){
     $agama = htmlspecialchars($data['agama']);
     $pendidikan = htmlspecialchars($data['pendidikan']);
     $diagnosa = htmlspecialchars($data['diagnosa']);
-    $foto_lama = htmlspecialchars($data['foto_lama']);
+    $foto_lama = $data['foto_lama'];
 
-    $foto = $foto_lama;
-    if ($_FILES['foto']['name']) {
-        $target_dir = "../uploads/";
-        $foto = uniqid() . "_" . basename($_FILES["foto"]["name"]);
-        $target_file = $target_dir . $foto;
-        move_uploaded_file($_FILES["foto"]["tmp_name"], $target_file);
-
-        if ($foto_lama && file_exists($target_dir . $foto_lama)) {
-            unlink($target_dir . $foto_lama);
+    if($_FILES['foto']['error'] === 4){
+        $foto = $foto_lama;
+    }else {
+        if (!empty($foto_lama) && file_exists("../uploads/" . $foto_lama)) {
+            unlink("../uploads/" . $foto_lama);
         }
+        $foto = upload_foto();
     }
 
     $sql = "UPDATE pasien SET nama = :nama, tanggal_lahir = :tanggal_lahir, jenis_kelamin = :jenis_kelamin, agama = :agama, pendidikan = :pendidikan, diagnosa = :diagnosa, foto = :foto WHERE id_pasien = :id";
@@ -102,9 +126,7 @@ function edit_pasien($data){
 
 function hapus_pasien($id){
     global $conn;
-    $query = $conn->prepare("SELECT foto FROM pasien WHERE id_pasien = :id");
-    $query->execute(['id' => $id]);
-    $pasien = $query->fetch(PDO::FETCH_ASSOC);
+    $pasien = id_pasien($id);
 
     if ($pasien) {
         if ($pasien['foto'] && file_exists("../uploads/" . $pasien['foto'])) {
