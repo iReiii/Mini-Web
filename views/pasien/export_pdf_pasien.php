@@ -1,6 +1,6 @@
 <?php
-require "../include/db.php";
-require "../vendor/setasign/fpdf/fpdf.php";
+require $_SERVER['DOCUMENT_ROOT'] . '/RS/include/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/RS/vendor/setasign/fpdf/fpdf.php';
 
 $id = $_GET['id'] ?? null;
 $pasien = id_pasien($id);
@@ -39,7 +39,7 @@ foreach ($fields as $label => $value) {
 }
 
 if (!empty($pasien['foto'])) {
-    $foto_path = "../uploads/" . $pasien['foto'];
+    $foto_path = $_SERVER['DOCUMENT_ROOT'] . '/RS/uploads/' . $pasien['foto'];
     if (file_exists($foto_path)) {
         $pdf->Ln(10);
         $pdf->Cell(190, 10, 'Foto Pasien', 0, 1, 'C');

@@ -26,15 +26,13 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.dokter (
-    id integer NOT NULL,
+    id_dokter integer NOT NULL,
     nama character varying(100) NOT NULL,
-    spesialisasi character varying(100) NOT NULL,
     tanggal_lahir date NOT NULL,
     jenis_kelamin character varying(10) NOT NULL,
     agama character varying(20) NOT NULL,
-    pendidikan character varying(50) NOT NULL,
+    spesialisasi character varying(100) NOT NULL,
     foto character varying(255),
-    kontak character varying(50) NOT NULL,
     CONSTRAINT dokter_agama_check CHECK (((agama)::text = ANY ((ARRAY['Islam'::character varying, 'Kristen'::character varying, 'Katolik'::character varying, 'Hindu'::character varying, 'Buddha'::character varying, 'Konghucu'::character varying])::text[]))),
     CONSTRAINT dokter_jenis_kelamin_check CHECK (((jenis_kelamin)::text = ANY ((ARRAY['Laki-laki'::character varying, 'Perempuan'::character varying])::text[])))
 );
@@ -61,7 +59,7 @@ ALTER SEQUENCE public.dokter_id_seq OWNER TO lumm;
 -- Name: dokter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: lumm
 --
 
-ALTER SEQUENCE public.dokter_id_seq OWNED BY public.dokter.id;
+ALTER SEQUENCE public.dokter_id_seq OWNED BY public.dokter.id_dokter;
 
 
 --
@@ -112,7 +110,8 @@ ALTER SEQUENCE public.pasien_id_pasien_seq OWNED BY public.pasien.id_pasien;
 CREATE TABLE public.users (
     id_users integer NOT NULL,
     username character varying(50),
-    password character varying(50)
+    password character varying(255),
+    foto character varying(255) DEFAULT 'default.jpg'::character varying
 );
 
 
@@ -141,10 +140,10 @@ ALTER SEQUENCE public.users_id_users_seq OWNED BY public.users.id_users;
 
 
 --
--- Name: dokter id; Type: DEFAULT; Schema: public; Owner: lumm
+-- Name: dokter id_dokter; Type: DEFAULT; Schema: public; Owner: lumm
 --
 
-ALTER TABLE ONLY public.dokter ALTER COLUMN id SET DEFAULT nextval('public.dokter_id_seq'::regclass);
+ALTER TABLE ONLY public.dokter ALTER COLUMN id_dokter SET DEFAULT nextval('public.dokter_id_seq'::regclass);
 
 
 --
@@ -165,7 +164,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id_users SET DEFAULT nextval('public.
 -- Data for Name: dokter; Type: TABLE DATA; Schema: public; Owner: lumm
 --
 
-COPY public.dokter (id, nama, spesialisasi, tanggal_lahir, jenis_kelamin, agama, pendidikan, foto, kontak) FROM stdin;
+COPY public.dokter (id_dokter, nama, tanggal_lahir, jenis_kelamin, agama, spesialisasi, foto) FROM stdin;
 \.
 
 
@@ -181,8 +180,7 @@ COPY public.pasien (id_pasien, nama, jenis_kelamin, tanggal_lahir, agama, pendid
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: lumm
 --
 
-COPY public.users (id_users, username, password) FROM stdin;
-1	Lummi	123
+COPY public.users (id_users, username, password, foto) FROM stdin;
 \.
 
 
@@ -190,21 +188,21 @@ COPY public.users (id_users, username, password) FROM stdin;
 -- Name: dokter_id_seq; Type: SEQUENCE SET; Schema: public; Owner: lumm
 --
 
-SELECT pg_catalog.setval('public.dokter_id_seq', 1, false);
+SELECT pg_catalog.setval('public.dokter_id_seq', 9, true);
 
 
 --
 -- Name: pasien_id_pasien_seq; Type: SEQUENCE SET; Schema: public; Owner: lumm
 --
 
-SELECT pg_catalog.setval('public.pasien_id_pasien_seq', 7, true);
+SELECT pg_catalog.setval('public.pasien_id_pasien_seq', 27, true);
 
 
 --
 -- Name: users_id_users_seq; Type: SEQUENCE SET; Schema: public; Owner: lumm
 --
 
-SELECT pg_catalog.setval('public.users_id_users_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_users_seq', 4, true);
 
 
 --
@@ -212,7 +210,7 @@ SELECT pg_catalog.setval('public.users_id_users_seq', 1, true);
 --
 
 ALTER TABLE ONLY public.dokter
-    ADD CONSTRAINT dokter_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT dokter_pkey PRIMARY KEY (id_dokter);
 
 
 --
